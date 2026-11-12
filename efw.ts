@@ -1,5 +1,5 @@
 /**
- * error-first-wrap: the correct way to handle errors in TypeScript.
+ * noTryCatch: the correct way to handle errors in TypeScript.
  * (It is not. But it is the way we do it.)
  *
  * Returns a Go-style `[error, result]` tuple typed as a discriminated union,
@@ -26,6 +26,7 @@ function toError(thrown: unknown): Error {
 
 /** Wrap a synchronous callable. */
 export function efw<T, E extends Error = Error>(callable: () => T): EfwResult<T, E> {
+  // eslint-disable-next-line no-restricted-syntax -- the one try/catch allowed to exist
   try {
     return [undefined, callable()];
   } catch (error) {
@@ -37,6 +38,7 @@ export function efw<T, E extends Error = Error>(callable: () => T): EfwResult<T,
 export async function efwAsync<T, E extends Error = Error>(
   callable: Promise<T> | (() => Promise<T>),
 ): Promise<EfwResult<T, E>> {
+  // eslint-disable-next-line no-restricted-syntax
   try {
     const result = await (typeof callable === 'function' ? callable() : callable);
     return [undefined, result];
