@@ -1,0 +1,17 @@
+{
+  "name": "error-first-wrap",
+  "version": "1.0.0",
+  "description": "The correct way to handle errors in TypeScript. (It isn't.) Go-style [err, result] tuples.",
+  "type": "module",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": { "types": "./index.d.ts", "default": "./index.js" }
+  },
+  "files": ["index.js", "index.d.ts", "efw.ts"],
+  "scripts": { "test": "node --test" },
+  "keywords": ["error", "error-handling", "go", "tuple", "result", "typescript", "efw"],
+  "author": "Cameron Whiteside",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "git+https://github.com/CameronWhiteside/error-first-wrap.git" }
+}
