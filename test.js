@@ -24,3 +24,13 @@ test('efwAsync non-Error rejection', async () => {
   assert.ok(err instanceof Error);
   assert.equal(err.message, 'bad');
 });
+
+import { Linter } from 'eslint';
+import noTryCatch from './eslint.js';
+
+test('eslint config bans try/catch and .catch()', () => {
+  const lint = (code) => new Linter().verify(code, [noTryCatch], 'x.js').map((m) => m.ruleId);
+  assert.deepEqual(lint('try { a() } catch (e) {}'), ['no-restricted-syntax']);
+  assert.deepEqual(lint('p.catch(() => {})'), ['no-restricted-syntax']);
+  assert.deepEqual(lint('const [err, v] = efw(() => a());'), []);
+});

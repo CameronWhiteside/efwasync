@@ -1,17 +1,46 @@
 {
-  "name": "error-first-wrap",
+  "name": "efw-async",
   "version": "1.0.0",
-  "description": "The correct way to handle errors in TypeScript. (It isn't.) Go-style [err, result] tuples.",
+  "description": "Go-style [err, result] tuples for TypeScript. efwAsync for promises, efw for sync. Plus an ESLint config that bans try/catch.",
   "type": "module",
   "main": "./index.js",
   "types": "./index.d.ts",
   "exports": {
-    ".": { "types": "./index.d.ts", "default": "./index.js" }
+    ".": {
+      "types": "./index.d.ts",
+      "default": "./index.js"
+    },
+    "./eslint": "./eslint.js"
   },
-  "files": ["index.js", "index.d.ts", "efw.ts"],
-  "scripts": { "test": "node --test" },
-  "keywords": ["error", "error-handling", "go", "tuple", "result", "typescript", "efw"],
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "efw.ts",
+    "eslint.js",
+    "skill"
+  ],
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [
+    "error",
+    "error-handling",
+    "go",
+    "tuple",
+    "result",
+    "typescript",
+    "eslint",
+    "claude-skill",
+    "efw",
+    "efwAsync"
+  ],
   "author": "Cameron Whiteside",
   "license": "MIT",
-  "repository": { "type": "git", "url": "git+https://github.com/CameronWhiteside/error-first-wrap.git" }
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CameronWhiteside/error-first-wrap.git"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0"
+  }
 }
