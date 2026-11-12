@@ -1,5 +1,5 @@
 {
-  "name": "efw-async",
+  "name": "notrycatch",
   "version": "1.0.0",
   "description": "Go-style [err, result] tuples for TypeScript. efwAsync for promises, efw for sync. Plus an ESLint config that bans try/catch.",
   "type": "module",
@@ -38,7 +38,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CameronWhiteside/error-first-wrap.git"
+    "url": "git+https://github.com/CameronWhiteside/notrycatch.git"
   },
   "devDependencies": {
     "eslint": "^9.0.0"

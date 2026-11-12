@@ -1,5 +1,5 @@
 /**
- * efw-async: the correct way to handle errors in TypeScript.
+ * noTryCatch: the correct way to handle errors in TypeScript.
  * (It is not. But it is the way we do it.)
  *
  * Returns a Go-style `[error, result]` tuple typed as a discriminated union,

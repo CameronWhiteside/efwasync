@@ -1,4 +1,4 @@
-# efw-async
+# noTryCatch
 
 **This is the way error handling should be done in TypeScript.**
 
@@ -15,12 +15,12 @@ There's a sync version too, `efw(() => JSON.parse(raw))`, same tuple.
 
 ## Seriously, don't install this
 
-It's 40 lines. Open [`efw.ts`](./efw.ts), copy it into your project, and delete the comment that says where you got it. Nobody will know. I'd hate to be the reason you have another `left-pad`.
+It's 40 lines. Open [`efw.ts`](./efw.ts), copy it into your project, and delete the comment that says where you got it. Nobody will know. You don't need another `left-pad` in your lockfile.
 
 If you really want it as a dependency, I'm not going to stop you:
 
 ```sh
-npm install efw-async
+npm install notrycatch
 ```
 
 ## Why try/catch is dumb
@@ -123,7 +123,7 @@ Everything's a `const`. Every failure gets its own handling. You read the happy 
 
 ```js
 // eslint.config.js
-import efw from 'efw-async/eslint';
+import efw from 'notrycatch/eslint';
 
 export default [
   // ...your config
@@ -131,14 +131,14 @@ export default [
 ];
 ```
 
-That bans `try` blocks and `.catch()` across your codebase. The one `try/catch` that gets to exist is the one inside `efw.ts`, and it has an `eslint-disable` on it. It's built on `no-restricted-syntax`, so if you already use that rule, spread `restrictions` from `efw-async/eslint` into your own list.
+That bans `try` blocks and `.catch()` across your codebase. The one `try/catch` that gets to exist is the one inside `efw.ts`, and it has an `eslint-disable` on it. It's built on `no-restricted-syntax`, so if you already use that rule, spread `restrictions` from `notrycatch/eslint` into your own list.
 
 ## Claude skill
 
 Your agent writes `try/catch` too. This stops it:
 
 ```sh
-mkdir -p .claude/skills && cp -r node_modules/efw-async/skill .claude/skills/efw
+mkdir -p .claude/skills && cp -r node_modules/notrycatch/skill .claude/skills/efw
 ```
 
 Or copy [`skill/SKILL.md`](./skill/SKILL.md) by hand. You know the drill by now.
