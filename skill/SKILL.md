@@ -1,6 +1,6 @@
 ---
 name: efw
-description: Use when writing or changing TypeScript/JavaScript that can throw or reject (I/O, fetch, JSON.parse, DB calls, SDK clients) in a project that uses notrycatch (efw / efwAsync), or when ESLint flags a try/catch or .catch(). Handle errors as Go-style [err, result] tuples, never try/catch.
+description: Use when writing or changing TypeScript/JavaScript that can throw or reject (I/O, fetch, JSON.parse, DB calls, SDK clients) in a project that uses efwasync (efw / efwAsync), or when ESLint flags a try/catch or .catch(). Handle errors as Go-style [err, result] tuples, never try/catch.
 ---
 
 # noTryCatch
@@ -8,7 +8,7 @@ description: Use when writing or changing TypeScript/JavaScript that can throw o
 This project does not use `try/catch` or `.catch()`. Anything that can throw goes through `efwAsync` (promise or async function) or `efw` (sync), and you check the error before touching the result.
 
 ```ts
-import { efw, efwAsync } from '@cameronwhiteside/notrycatch'; // or the project's local copy of efw.ts
+import { efw, efwAsync } from 'efwasync'; // or the project's local copy of efw.ts
 
 const [err, user] = await efwAsync(db.findUser(id));
 if (err) return notFound();
@@ -54,4 +54,4 @@ return body;
 
 ## Lint
 
-ESLint bans `TryStatement` and `.catch()` through `@cameronwhiteside/notrycatch/eslint`. The only allowed `try/catch` is inside `efw.ts` itself. Never add `eslint-disable` to get around it anywhere else. Rewrite the code instead.
+ESLint bans `TryStatement` and `.catch()` through `efwasync/eslint`. The only allowed `try/catch` is inside `efw.ts` itself. Never add `eslint-disable` to get around it anywhere else. Rewrite the code instead.
