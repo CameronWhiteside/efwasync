@@ -38,7 +38,7 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CameronWhiteside/notrycatch.git"
+    "url": "git+https://github.com/CameronWhiteside/efwasync.git"
   },
   "devDependencies": {
     "eslint": "^9.0.0"
