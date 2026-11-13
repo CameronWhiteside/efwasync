@@ -1,4 +1,4 @@
-# efwasync
+# efwAsync
 
 **This is the way error handling should be done in TypeScript.**
 
@@ -38,7 +38,7 @@ You need `strictNullChecks` on (it comes with `strict`) for the narrowing to wor
 
 ## Seriously, don't install this
 
-It's 40 lines. Open [`efw.ts`](./efw.ts), copy it into your project, and delete the comment that says where you got it. Keep the line about Bryan, though. You don't need another `left-pad` in your lockfile.
+It's 40 lines. Open [`efw.ts`](./efw.ts), copy it into your project, and delete the comment that says where you got it. Nobody will know. You don't need another `left-pad` in your lockfile.
 
 If you really want it as a dependency, I'm not going to stop you:
 
@@ -193,7 +193,7 @@ It's two functions and a `try/catch`. It's been production ready since 1995.
 
 ## Credit
 
-The great [Bryan Latten](https://github.com/bryanlatten) first shared this pattern with me. I've been copying it into every codebase since. All credit to Bryan, all the bad jokes are mine.
+The great [Bryan Latten](https://github.com/bryanlatten) first shared this pattern with me. I've been copying it into every codebase since.
 
 ## License
 

@@ -1,5 +1,5 @@
 /**
- * efwasync: the correct way to handle errors in TypeScript.
+ * efwAsync: the correct way to handle errors in TypeScript.
  * (It is not. But it is the way we do it.)
  * Pattern first shared by Bryan Latten (https://github.com/bryanlatten).
  *
