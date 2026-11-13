@@ -176,15 +176,19 @@ Or copy [`skill/SKILL.md`](./skill/SKILL.md) by hand. You know the drill by now.
 ## FAQ
 
 **Isn't this just Go?**
+
 Yes.
 
 **Why not a `Result` type with `.map` and `.andThen` and `.unwrapOr`?**
+
 You can have that. It's a different library, and its README is longer than this one.
 
 **What about `finally`?**
+
 You have `if (err)`. Put the cleanup under it.
 
 **Is this production ready?**
+
 It's two functions and a `try/catch`. It's been production ready since 1995.
 
 ## License
