@@ -1,6 +1,6 @@
 // Flat-config block that bans try/catch. Use efw / efwAsync instead.
-//   import efw from 'efwasync/eslint';
-//   export default [...yourConfig, efw];
+//   import noTryCatch from 'efwasync/eslint';
+//   export default [...yourConfig, noTryCatch];
 // ponytail: built on no-restricted-syntax, so it replaces (not merges with) any
 // no-restricted-syntax list you already have. Spread your selectors in if so.
 const message = 'try/catch is not how we handle errors here. Use efw() or efwAsync() and check the error first.';
