@@ -20,7 +20,8 @@
     "skill"
   ],
   "scripts": {
-    "test": "node --test"
+    "test": "node --test",
+    "typecheck": "tsc --noEmit --strict --target es2022 --module nodenext --moduleResolution nodenext types-check.ts"
   },
   "keywords": [
     "error",
@@ -41,6 +42,7 @@
     "url": "git+https://github.com/CameronWhiteside/efwasync.git"
   },
   "devDependencies": {
-    "eslint": "^9.0.0"
+    "eslint": "^9.0.0",
+    "typescript": "^5.6.0"
   }
 }

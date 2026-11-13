@@ -1,17 +1,40 @@
-# noTryCatch
+# efwasync
 
 **This is the way error handling should be done in TypeScript.**
 
 It isn't. TypeScript has `try/catch`, and nobody on the committee is taking my calls. I still think this is how it should work, and I bet a week with it has you leaving comments on every `try` block you see in review.
 
+`efwAsync` is error-first wrap, async. You hand it a promise and get back `[err, result]`.
+
 ```ts
-const [err, user] = await efwAsync(db.findUser(id));
+import { efwAsync } from 'efwasync';
+
+declare function findUser(id: string): Promise<User>;
+
+const [err, user] = await efwAsync(findUser(id));
+// err:  Error | undefined
+// user: User | undefined
+
+user.name; // ✗ 'user' is possibly 'undefined'
+
 if (err) return notFound();
 
-user.name; // a User now, because you dealt with the error first
+user.name; // ✓ user: User, because you dealt with the error first
 ```
 
-There's a sync version too, `efw(() => JSON.parse(raw))`, same tuple.
+There's a sync one too, `efw`, for things like `JSON.parse`. Same tuple.
+
+```ts
+import { efw } from 'efwasync';
+
+const [err, config] = efw<Config>(() => JSON.parse(raw));
+// err:    Error | undefined
+// config: Config | undefined
+if (err) return defaults;
+// config: Config
+```
+
+You need `strictNullChecks` on (it comes with `strict`) for the narrowing to work. You should have that on anyway.
 
 ## Seriously, don't install this
 
@@ -25,18 +48,18 @@ npm install efwasync
 
 ## Why try/catch is dumb
 
-So here's the thing. Everyone writes `try/catch` in TypeScript, and then everyone writes the same five bad patterns with it. I've written all of them. You have too.
+So here's the thing. Everyone writes `try/catch` in TypeScript, and then everyone writes the same bad patterns with it. I've written all of them. You have too.
 
 ### The `let` up top
 
 ```ts
-let user;
+let user: User;
 try {
-  user = await db.findUser(id);
-} catch (e) {
+  user = await findUser(id);
+} catch (e: unknown) {
   return notFound();
 }
-user.name;
+user.name; // user: User, and still reassignable for the rest of the function
 ```
 
 You need `user` after the `try`, so you declare it outside, with no value, as a `let`. Now it's mutable for the rest of the function. Do that three times and you've got three `let`s at the top like you're writing C in 1998.
@@ -44,10 +67,11 @@ You need `user` after the `try`, so you declare it outside, with no value, as a 
 ### The `let` with a fallback
 
 ```ts
-let config = defaults;
+let config: Config = defaults;
 try {
-  config = JSON.parse(raw);
+  config = JSON.parse(raw); // JSON.parse returns any, so this compiles no matter what's in raw
 } catch {}
+// config: Config. Parsed or default? The type can't tell you.
 ```
 
 Did it parse, or is that the default? I don't know, and you don't either. That empty `catch {}` isn't handling anything. It's hiding the error from you.
@@ -56,11 +80,11 @@ Did it parse, or is that the default? I don't know, and you don't either. That e
 
 ```ts
 try {
-  const user = await db.findUser(id);
-  const org = await db.findOrg(user.orgId);
-  const invoice = await stripe.invoices.create({ customer: org.stripeId });
-  await email.send(user.email, invoice);
-} catch (e) {
+  const user: User = await findUser(id);
+  const org: Org = await findOrg(user.orgId);
+  const invoice: Stripe.Invoice = await stripe.invoices.create({ customer: org.stripeId });
+  await sendEmail(user.email, invoice);
+} catch (e: unknown) { // thrown by any of four calls, and the type is the same for all of them
   log.error('something failed', e);
 }
 ```
@@ -70,8 +94,8 @@ So you fix the `let` problem by putting everything in the `try`, and now four di
 ### `e` is `unknown`
 
 ```ts
-catch (e) {
-  log.error(e.message); // 'e' is of type 'unknown'
+catch (e: unknown) {
+  log.error(e.message); // ✗ 'e' is of type 'unknown'
 }
 ```
 
@@ -80,15 +104,17 @@ JavaScript lets you throw anything. A string, a number, `undefined`, a Promise. 
 ### Nothing makes you handle it
 
 ```ts
-const user = await db.findUser(id); // this can throw, and TypeScript says nothing
+declare function findUser(id: string): Promise<User>; // no mention of failure anywhere
+
+const user: User = await findUser(id); // this can throw, and TypeScript says nothing
 ```
 
-This is the one that actually bugs me. TypeScript doesn't track what throws. There's no `throws` clause and no checked exceptions. `db.findUser` says it returns a `User`, and that's only true when it works. The compiler is happy to let you ship zero error handling, and you find out at 3am.
+This is the one that actually bugs me. TypeScript doesn't track what throws. There's no `throws` clause and no checked exceptions. `findUser` says it returns a `User`, and that's only true when it works. The compiler is happy to let you ship zero error handling, and you find out at 3am.
 
 With `efwAsync`, the return type is this:
 
 ```ts
-[Error, undefined] | [undefined, User]
+efwAsync(findUser(id)): Promise<readonly [Error, undefined] | readonly [undefined, User]>
 ```
 
 You can't use `user` as a `User` until you've checked `err`. The code won't compile until you handle it. I think that's where the error belonged the whole time, in the return type, where you can see it.
@@ -96,7 +122,8 @@ You can't use `user` as a `User` until you've checked `err`. The code won't comp
 ### And `.catch()`
 
 ```ts
-const user = await db.findUser(id).catch(() => null);
+const user: User | null = await findUser(id).catch(() => null);
+// null means it failed. Why did it fail? That's gone.
 ```
 
 Now `user` is `User | null` and the error is gone. Or you chain `.then().catch().then()` and the control flow reads like a choose-your-own-adventure book.
@@ -104,17 +131,20 @@ Now `user` is `User | null` and the error is gone. Or you chain `.then().catch()
 ## What it looks like instead
 
 ```ts
-const [userErr, user] = await efwAsync(db.findUser(id));
+const [userErr, user] = await efwAsync(findUser(id));
 if (userErr) return notFound();
+// user: User
 
-const [orgErr, org] = await efwAsync(db.findOrg(user.orgId));
+const [orgErr, org] = await efwAsync(findOrg(user.orgId));
 if (orgErr) return serverError(orgErr);
+// org: Org
 
 const [invoiceErr, invoice] = await efwAsync(() => stripe.invoices.create({ customer: org.stripeId }));
 if (invoiceErr) return paymentFailed(invoiceErr);
+// invoice: Stripe.Invoice
 
-const [emailErr] = await efwAsync(email.send(user.email, invoice));
-if (emailErr) log.warn('invoice email bounced', emailErr); // not fatal, keep going
+const [emailErr] = await efwAsync(sendEmail(user.email, invoice));
+if (emailErr) log.warn('invoice email bounced', emailErr); // emailErr: Error. Not fatal, keep going
 ```
 
 Everything's a `const`. Every failure gets its own handling. You read the happy path straight down the left edge. It's Go, basically, and Go got this one right.
@@ -123,15 +153,15 @@ Everything's a `const`. Every failure gets its own handling. You read the happy 
 
 ```js
 // eslint.config.js
-import efw from 'efwasync/eslint';
+import noTryCatch from 'efwasync/eslint';
 
 export default [
   // ...your config
-  efw,
+  noTryCatch,
 ];
 ```
 
-That bans `try` blocks and `.catch()` across your codebase. The one `try/catch` that gets to exist is the one inside `efw.ts`, and it has an `eslint-disable` on it. It's built on `no-restricted-syntax`, so if you already use that rule, spread `restrictions` from `efwasync/eslint` into your own list.
+That bans `try` blocks and `.catch()` across your codebase. The one `try/catch` that gets to exist is the one inside `efw.ts`, and it has an `eslint-disable` on it. It's built on `no-restricted-syntax`, so if you already use that rule, import `{ restrictions }` from `efwasync/eslint` and spread it into your own list.
 
 ## Claude skill
 
