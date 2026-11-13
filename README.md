@@ -38,7 +38,7 @@ You need `strictNullChecks` on (it comes with `strict`) for the narrowing to wor
 
 ## Seriously, don't install this
 
-It's 40 lines. Open [`efw.ts`](./efw.ts), copy it into your project, and delete the comment that says where you got it. Nobody will know. You don't need another `left-pad` in your lockfile.
+It's 40 lines. Open [`efw.ts`](./efw.ts), copy it into your project, and delete the comment that says where you got it. Keep the line about Bryan, though. You don't need another `left-pad` in your lockfile.
 
 If you really want it as a dependency, I'm not going to stop you:
 

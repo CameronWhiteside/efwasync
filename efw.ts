@@ -1,6 +1,7 @@
 /**
  * efwasync: the correct way to handle errors in TypeScript.
  * (It is not. But it is the way we do it.)
+ * Pattern first shared by Bryan Latten (https://github.com/bryanlatten).
  *
  * Returns a Go-style `[error, result]` tuple typed as a discriminated union,
  * `[E, undefined] | [undefined, T]`. TypeScript won't let you touch `result`
