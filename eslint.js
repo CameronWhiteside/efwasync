@@ -1,5 +1,5 @@
 // Flat-config block that bans try/catch. Use efw / efwAsync instead.
-//   import efw from 'notrycatch/eslint';
+//   import efw from '@cameronwhiteside/notrycatch/eslint';
 //   export default [...yourConfig, efw];
 // ponytail: built on no-restricted-syntax, so it replaces (not merges with) any
 // no-restricted-syntax list you already have. Spread your selectors in if so.
