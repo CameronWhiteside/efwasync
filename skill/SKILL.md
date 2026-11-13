@@ -3,7 +3,7 @@ name: efw
 description: Use when writing or changing TypeScript/JavaScript that can throw or reject (I/O, fetch, JSON.parse, DB calls, SDK clients) in a project that uses efwasync (efw / efwAsync), or when ESLint flags a try/catch or .catch(). Handle errors as Go-style [err, result] tuples, never try/catch.
 ---
 
-# noTryCatch
+# efwasync
 
 This project does not use `try/catch` or `.catch()`. Anything that can throw goes through `efwAsync` (promise or async function) or `efw` (sync), and you check the error before touching the result.
 
