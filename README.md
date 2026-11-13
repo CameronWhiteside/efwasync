@@ -191,6 +191,10 @@ You have `if (err)`. Put the cleanup under it.
 
 It's two functions and a `try/catch`. It's been production ready since 1995.
 
+## Credit
+
+The great [Bryan Latten](https://github.com/bryanlatten) first shared this pattern with me. I've been copying it into every codebase since. All credit to Bryan, all the bad jokes are mine.
+
 ## License
 
 MIT. Copy it. That's the whole point.
